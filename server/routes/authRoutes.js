@@ -7,10 +7,15 @@ const {
   updateProfile,
 } = require("../controllers/authController");
 const { protect } = require("../middleware/authMiddleware");
- 
-router.post("/register", registerUser);
-router.post("/login", loginUser);
+const {
+  registerValidationRules,
+  loginValidationRules,
+  updateProfileValidationRules,
+} = require("../middleware/validators/authValidator");
+
+router.post("/register", registerValidationRules, registerUser);
+router.post("/login", loginValidationRules, loginUser);
 router.get("/profile", protect, getProfile);
-router.put("/profile", protect, updateProfile);
- 
+router.put("/profile", protect, updateProfileValidationRules, updateProfile);
+
 module.exports = router;
