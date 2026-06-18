@@ -1,10 +1,8 @@
 const express = require("express");
 const router = express.Router();
+const { getRecommendedUsers } = require("../controllers/matchController");
+const { protect } = require("../middleware/authMiddleware");
 
-router.get("/", (req, res) => {
-  res.json({
-    message: "Match Routes Working",
-  });
-});
+router.get("/", protect, getRecommendedUsers);
 
 module.exports = router;

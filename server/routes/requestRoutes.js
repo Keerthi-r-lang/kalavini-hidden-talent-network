@@ -6,11 +6,15 @@ const {
   updateRequestStatus,
 } = require("../controllers/requestController");
 const { protect } = require("../middleware/authMiddleware");
- 
+const {
+  sendRequestValidationRules,
+  updateRequestStatusValidationRules,
+} = require("../middleware/validators/requestValidator");
+
 router.use(protect);
- 
-router.post("/", sendRequest);
+
+router.post("/", sendRequestValidationRules, sendRequest);
 router.get("/", getRequests);
-router.put("/:id", updateRequestStatus);
- 
+router.put("/:id", updateRequestStatusValidationRules, updateRequestStatus);
+
 module.exports = router;
