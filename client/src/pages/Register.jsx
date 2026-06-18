@@ -1,14 +1,4 @@
 // src/pages/Register.jsx
-//
-// Registration page. Same split-panel layout as Login (shares
-// Auth.module.css). Collects name, email, password, and a
-// confirm-password field (confirm-password is a frontend-only
-// check - the backend never sees it, it just protects against
-// typos before we send the real password).
-//
-// On success, useAuth().register() both creates the account AND
-// logs the user in immediately (the backend returns a token on
-// registration), so we navigate straight to the dashboard.
 
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -24,16 +14,27 @@ function Register() {
     email: "",
     password: "",
     confirmPassword: "",
+    location: "",
+    bio: "",
   });
+
   const [fieldErrors, setFieldErrors] = useState({});
   const [serverError, setServerError] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
     if (fieldErrors[name]) {
-      setFieldErrors((prev) => ({ ...prev, [name]: "" }));
+      setFieldErrors((prev) => ({
+        ...prev,
+        [name]: "",
+      }));
     }
   };
 
@@ -67,27 +68,35 @@ function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     setServerError("");
 
     const errors = validate();
+
     if (Object.keys(errors).length > 0) {
       setFieldErrors(errors);
       return;
     }
 
     setSubmitting(true);
+
     try {
-      // confirmPassword is intentionally excluded - the backend
-      // doesn't expect or need it.
       await register({
         name: formData.name,
         email: formData.email,
         password: formData.password,
+        location: formData.location,
+        bio: formData.bio,
       });
-      navigate("/dashboard", { replace: true });
+
+      navigate("/dashboard", {
+        replace: true,
+      });
     } catch (error) {
       const message =
-        error.response?.data?.message || "Something went wrong. Please try again.";
+        error.response?.data?.message ||
+        "Something went wrong. Please try again.";
+
       setServerError(message);
     } finally {
       setSubmitting(false);
@@ -98,13 +107,16 @@ function Register() {
     <div className={styles.page}>
       <div className={styles.brandPanel}>
         <div className={styles.brandLogo}>Kalavini</div>
+
         <div className={styles.brandContent}>
           <h2>Teach what you know. Learn what you love.</h2>
+
           <p>
-            Join a community where skills are the currency. No money changes
-            hands - just knowledge, craft, and connection.
+            Join a community where skills are the currency. Exchange knowledge,
+            discover hidden talents, and grow together.
           </p>
         </div>
+
         <div className={styles.brandFooterNote}>
           Art &middot; Knowledge &middot; Culture &middot; Community
         </div>
@@ -113,76 +125,144 @@ function Register() {
       <div className={styles.formPanel}>
         <div className={styles.formCard}>
           <h1>Create your account</h1>
+
           <p className={styles.formSubtitle}>
-            Already have an account? <Link to="/login">Log in</Link> instead.
+            Already have an account?{" "}
+            <Link to="/login">Log in</Link> instead.
           </p>
 
-          {serverError && <div className={styles.serverError}>{serverError}</div>}
+          {serverError && (
+            <div className={styles.serverError}>{serverError}</div>
+          )}
 
-          <form className={styles.form} onSubmit={handleSubmit} noValidate>
+          <form
+            className={styles.form}
+            onSubmit={handleSubmit}
+            noValidate
+          >
+            {/* Name */}
+
             <div className={styles.field}>
-              <label htmlFor="name">Full name</label>
+              <label htmlFor="name">Full Name</label>
+
               <input
                 id="name"
                 name="name"
                 type="text"
                 autoComplete="name"
+                placeholder="Keerthi"
                 value={formData.name}
                 onChange={handleChange}
                 className={fieldErrors.name ? styles.inputError : ""}
-                placeholder="Asha Rao"
               />
+
               {fieldErrors.name && (
-                <span className={styles.fieldErrorText}>{fieldErrors.name}</span>
+                <span className={styles.fieldErrorText}>
+                  {fieldErrors.name}
+                </span>
               )}
             </div>
 
+            {/* Email */}
+
             <div className={styles.field}>
               <label htmlFor="email">Email</label>
+
               <input
                 id="email"
                 name="email"
                 type="email"
                 autoComplete="email"
+                placeholder="you@example.com"
                 value={formData.email}
                 onChange={handleChange}
                 className={fieldErrors.email ? styles.inputError : ""}
-                placeholder="you@example.com"
               />
+
               {fieldErrors.email && (
-                <span className={styles.fieldErrorText}>{fieldErrors.email}</span>
+                <span className={styles.fieldErrorText}>
+                  {fieldErrors.email}
+                </span>
               )}
             </div>
 
+            {/* Password */}
+
             <div className={styles.field}>
               <label htmlFor="password">Password</label>
+
               <input
                 id="password"
                 name="password"
                 type="password"
                 autoComplete="new-password"
+                placeholder="Minimum 6 characters"
                 value={formData.password}
                 onChange={handleChange}
                 className={fieldErrors.password ? styles.inputError : ""}
-                placeholder="At least 6 characters"
               />
+
               {fieldErrors.password && (
-                <span className={styles.fieldErrorText}>{fieldErrors.password}</span>
+                <span className={styles.fieldErrorText}>
+                  {fieldErrors.password}
+                </span>
               )}
             </div>
 
+            {/* Location */}
+
             <div className={styles.field}>
-              <label htmlFor="confirmPassword">Confirm password</label>
+              <label htmlFor="location">
+                Location <small>(Optional)</small>
+              </label>
+
+              <input
+                id="location"
+                name="location"
+                type="text"
+                placeholder="Visakhapatnam"
+                value={formData.location}
+                onChange={handleChange}
+              />
+            </div>
+
+            {/* Bio */}
+
+            <div className={styles.field}>
+              <label htmlFor="bio">
+                Bio <small>(Optional)</small>
+              </label>
+
+              <textarea
+                id="bio"
+                name="bio"
+                rows="3"
+                placeholder="Tell everyone a little about yourself..."
+                value={formData.bio}
+                onChange={handleChange}
+              />
+            </div>
+
+            {/* Confirm Password */}
+
+            <div className={styles.field}>
+              <label htmlFor="confirmPassword">
+                Confirm Password
+              </label>
+
               <input
                 id="confirmPassword"
                 name="confirmPassword"
                 type="password"
                 autoComplete="new-password"
+                placeholder="Re-enter password"
                 value={formData.confirmPassword}
                 onChange={handleChange}
-                className={fieldErrors.confirmPassword ? styles.inputError : ""}
-                placeholder="Re-enter your password"
+                className={
+                  fieldErrors.confirmPassword ? styles.inputError : ""
+                }
               />
+
               {fieldErrors.confirmPassword && (
                 <span className={styles.fieldErrorText}>
                   {fieldErrors.confirmPassword}
@@ -195,12 +275,14 @@ function Register() {
               className={`btn btn-primary ${styles.submitBtn}`}
               disabled={submitting}
             >
-              {submitting ? "Creating account..." : "Create account"}
+              {submitting
+                ? "Creating Account..."
+                : "Create Account"}
             </button>
           </form>
 
           <p className={styles.switchText}>
-            <Link to="/">← Back to home</Link>
+            <Link to="/">← Back to Home</Link>
           </p>
         </div>
       </div>

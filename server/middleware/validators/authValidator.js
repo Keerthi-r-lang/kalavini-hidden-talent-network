@@ -1,12 +1,7 @@
 const { body, validationResult } = require("express-validator");
 
 // ---------------------------------------------------------------
-// handleValidationErrors
-// ---------------------------------------------------------------
-// Generic middleware that checks if any of the validation rules
-// below failed. If they did, it responds with 400 and a list of
-// readable error messages instead of letting the request reach
-// the controller. Reused by every validator array in this file.
+// Handle Validation Errors
 // ---------------------------------------------------------------
 const handleValidationErrors = (req, res, next) => {
   const errors = validationResult(req);
@@ -25,12 +20,7 @@ const handleValidationErrors = (req, res, next) => {
 };
 
 // ---------------------------------------------------------------
-// registerValidationRules
-// ---------------------------------------------------------------
-// Attached to POST /api/auth/register before registerUser runs.
-// Each .custom()/.isX() call adds one rule; express-validator
-// collects failures and handleValidationErrors turns them into
-// a response.
+// Register Validation
 // ---------------------------------------------------------------
 const registerValidationRules = [
   body("name")
@@ -52,18 +42,25 @@ const registerValidationRules = [
     .notEmpty()
     .withMessage("Password is required")
     .isLength({ min: 6 })
-    .withMessage("Password must be at least 6 characters long"),
+    .withMessage("Password must be at least 6 characters"),
+
+  body("bio")
+    .optional()
+    .trim()
+    .isLength({ max: 500 })
+    .withMessage("Bio cannot exceed 500 characters"),
+
+  body("location")
+    .optional()
+    .trim()
+    .isLength({ max: 100 })
+    .withMessage("Location cannot exceed 100 characters"),
 
   handleValidationErrors,
 ];
 
 // ---------------------------------------------------------------
-// loginValidationRules
-// ---------------------------------------------------------------
-// Attached to POST /api/auth/login. Intentionally lighter than
-// registration - we just need a well-formed email and a
-// non-empty password; the actual credential check happens in the
-// controller against the hashed password.
+// Login Validation
 // ---------------------------------------------------------------
 const loginValidationRules = [
   body("email")
@@ -74,18 +71,15 @@ const loginValidationRules = [
     .withMessage("Please provide a valid email address")
     .normalizeEmail(),
 
-  body("password").notEmpty().withMessage("Password is required"),
+  body("password")
+    .notEmpty()
+    .withMessage("Password is required"),
 
   handleValidationErrors,
 ];
 
 // ---------------------------------------------------------------
-// updateProfileValidationRules
-// ---------------------------------------------------------------
-// Attached to PUT /api/auth/profile. All fields are optional here
-// since this is an update (the user might only want to change
-// their bio, for example) - but if a field IS provided, it must be
-// valid.
+// Update Profile Validation
 // ---------------------------------------------------------------
 const updateProfileValidationRules = [
   body("name")
@@ -100,15 +94,27 @@ const updateProfileValidationRules = [
     .isLength({ max: 500 })
     .withMessage("Bio cannot exceed 500 characters"),
 
+  body("location")
+    .optional()
+    .trim()
+    .isLength({ max: 100 })
+    .withMessage("Location cannot exceed 100 characters"),
+
+  body("availability")
+    .optional()
+    .trim()
+    .isLength({ max: 100 })
+    .withMessage("Availability cannot exceed 100 characters"),
+
   body("skillsToTeach")
     .optional()
     .isArray()
-    .withMessage("skillsToTeach must be an array of strings"),
+    .withMessage("skillsToTeach must be an array"),
 
   body("skillsToLearn")
     .optional()
     .isArray()
-    .withMessage("skillsToLearn must be an array of strings"),
+    .withMessage("skillsToLearn must be an array"),
 
   handleValidationErrors,
 ];

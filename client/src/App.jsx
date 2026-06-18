@@ -1,7 +1,8 @@
 import { Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
-
+import AddSkill from "./pages/AddSkill";
+import Profile from "./pages/Profile";
 import Landing from "./pages/Landing";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -26,6 +27,22 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+  path="/add-skill"
+  element={
+    <ProtectedRoute>
+      <AddSkill />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/profile"
+  element={
+    <ProtectedRoute>
+      <Profile />
+    </ProtectedRoute>
+  }
+/>
 
         <Route path="*" element={<NotFound />} />
       </Routes>
