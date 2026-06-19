@@ -10,6 +10,7 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
 import BrowseSkills from "./pages/BrowseSkills";
+import Requests from "./pages/Requests";
 function App() {
   return (
     <AuthProvider>
@@ -57,6 +58,14 @@ function App() {
   element={
     <ProtectedRoute>
       <SkillDetails />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/requests"
+  element={
+    <ProtectedRoute>
+      <Requests />
     </ProtectedRoute>
   }
 />

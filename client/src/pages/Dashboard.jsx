@@ -83,6 +83,12 @@ console.log(matches);
           >
             📚 Browse Skills
           </button>
+          <button
+  className="logout-btn"
+  onClick={() => navigate("/requests")}
+>
+  📩 Requests
+</button>
 
           <button
             className="logout-btn"

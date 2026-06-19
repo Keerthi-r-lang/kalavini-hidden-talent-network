@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
+
 import { useParams, useNavigate } from "react-router-dom";
+import { sendRequest } from "../services/requestService";
 import api from "../services/api";
 import "./SkillDetails.css";
 
@@ -25,7 +27,19 @@ function SkillDetails() {
   if (!skill) {
     return <h2 style={{ padding: 40 }}>Loading...</h2>;
   }
+  async function handleRequest() {
+  try {
+    await sendRequest({
+      skillId: skill._id,
+    });
 
+    alert("Request sent successfully!");
+  } catch (err) {
+    console.error(err);
+    alert(err.response?.data?.message || "Unable to send request");
+  }
+}
+ 
   return (
     <div className="skill-details-container">
 
@@ -72,6 +86,13 @@ function SkillDetails() {
         <h3>Description</h3>
 
         <p>{skill.description}</p>
+       <button
+  className="request-btn"
+  onClick={handleRequest}
+>
+  📩 Send Request
+</button>
+  
 
       </div>
 
