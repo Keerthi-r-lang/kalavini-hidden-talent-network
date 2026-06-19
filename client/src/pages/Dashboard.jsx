@@ -49,7 +49,13 @@ function Dashboard() {
     }
   }
 
-  if (loading) return <Loader />;
+ if (loading) return <Loader />;
+
+console.log(matches);
+
+
+
+  
 
   return (
     <div className="dashboard">
