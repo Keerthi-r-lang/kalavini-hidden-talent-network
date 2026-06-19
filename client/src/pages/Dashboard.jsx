@@ -61,12 +61,21 @@ function Dashboard() {
           <p>Teach • Learn • Grow Together</p>
         </div>
 
+
         <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+
           <button
             className="logout-btn"
             onClick={() => navigate("/profile")}
           >
             👤 Profile
+          </button>
+
+          <button
+            className="logout-btn"
+            onClick={() => navigate("/browse-skills")}
+          >
+            📚 Browse Skills
           </button>
 
           <button
@@ -82,7 +91,9 @@ function Dashboard() {
           >
             Logout
           </button>
+
         </div>
+
       </div>
 
       <div className="profile-card">

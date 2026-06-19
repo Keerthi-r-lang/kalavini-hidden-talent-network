@@ -2,13 +2,14 @@ import { Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AddSkill from "./pages/AddSkill";
+import SkillDetails from "./pages/SkillDetails";
 import Profile from "./pages/Profile";
 import Landing from "./pages/Landing";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
-
+import BrowseSkills from "./pages/BrowseSkills";
 function App() {
   return (
     <AuthProvider>
@@ -40,6 +41,22 @@ function App() {
   element={
     <ProtectedRoute>
       <Profile />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/browse-skills"
+  element={
+    <ProtectedRoute>
+      <BrowseSkills />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/skill/:id"
+  element={
+    <ProtectedRoute>
+      <SkillDetails />
     </ProtectedRoute>
   }
 />

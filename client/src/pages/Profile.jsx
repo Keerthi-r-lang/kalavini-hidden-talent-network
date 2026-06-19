@@ -11,15 +11,17 @@ function Profile() {
     bio: user?.bio || "",
     location: user?.location || "",
     availability: user?.availability || "",
+    skillsToTeach: (user?.skillsToTeach || []).join(", "),
+    skillsToLearn: (user?.skillsToLearn || []).join(", "),
   });
 
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
+    setFormData((prev) => ({
+      ...prev,
       [e.target.name]: e.target.value,
-    });
+    }));
   };
 
   const handleSubmit = async (e) => {
@@ -28,7 +30,20 @@ function Profile() {
     try {
       setLoading(true);
 
-      const res = await updateProfile(formData);
+      const payload = {
+        ...formData,
+        skillsToTeach: formData.skillsToTeach
+          .split(",")
+          .map((s) => s.trim())
+          .filter(Boolean),
+
+        skillsToLearn: formData.skillsToLearn
+          .split(",")
+          .map((s) => s.trim())
+          .filter(Boolean),
+      };
+
+      const res = await updateProfile(payload);
 
       updateUser(res.user);
 
@@ -44,24 +59,24 @@ function Profile() {
   return (
     <div className="profile-page">
       <div className="profile-card">
+
         <h1>My Profile</h1>
 
         <form onSubmit={handleSubmit}>
+
           <label>Name</label>
           <input
             name="name"
             value={formData.name}
             onChange={handleChange}
-            style={{ width: "100%", padding: 12, marginBottom: 20 }}
           />
 
           <label>Bio</label>
           <textarea
-            name="bio"
             rows="4"
+            name="bio"
             value={formData.bio}
             onChange={handleChange}
-            style={{ width: "100%", padding: 12, marginBottom: 20 }}
           />
 
           <label>Location</label>
@@ -69,7 +84,6 @@ function Profile() {
             name="location"
             value={formData.location}
             onChange={handleChange}
-            style={{ width: "100%", padding: 12, marginBottom: 20 }}
           />
 
           <label>Availability</label>
@@ -77,17 +91,34 @@ function Profile() {
             name="availability"
             value={formData.availability}
             onChange={handleChange}
-            style={{ width: "100%", padding: 12, marginBottom: 20 }}
+          />
+
+          <label>Skills I Can Teach</label>
+          <input
+            name="skillsToTeach"
+            placeholder="Python, React, Java"
+            value={formData.skillsToTeach}
+            onChange={handleChange}
+          />
+
+          <label>Skills I Want To Learn</label>
+          <input
+            name="skillsToLearn"
+            placeholder="UI Design, Photoshop"
+            value={formData.skillsToLearn}
+            onChange={handleChange}
           />
 
           <button
-            type="submit"
             className="save-btn"
+            type="submit"
             disabled={loading}
           >
             {loading ? "Saving..." : "Save Changes"}
           </button>
+
         </form>
+
       </div>
     </div>
   );

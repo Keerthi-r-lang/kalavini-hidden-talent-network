@@ -115,6 +115,8 @@ const updateProfile = async (req, res, next) => {
   try {
     const user = req.user;
 
+    console.log("REQ BODY:", req.body);
+
     const updatableFields = [
       "name",
       "bio",
@@ -131,13 +133,18 @@ const updateProfile = async (req, res, next) => {
       }
     });
 
+    console.log("BEFORE SAVE:", user);
+
     const updatedUser = await user.save();
+
+    console.log("AFTER SAVE:", updatedUser);
 
     res.status(200).json({
       message: "Profile updated successfully",
       user: formatUserResponse(updatedUser),
     });
   } catch (error) {
+    console.error(error);
     next(error);
   }
 };

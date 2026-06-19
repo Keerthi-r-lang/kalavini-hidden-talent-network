@@ -1,30 +1,72 @@
-// src/pages/Landing.jsx
-//
-// TEMPORARY placeholder for the landing page. This will be
-// replaced with the full Hero/Features/Testimonials/etc. design
-// in the "Pages - Landing" module. For now it just confirms the
-// router and theme are wired up correctly.
+import { Link } from "react-router-dom";
+import "./Landing.css";
 
 function Landing() {
   return (
-    <div
-      style={{
-        minHeight: "70vh",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        textAlign: "center",
-        padding: "48px 24px",
-      }}
-    >
-      <h1 className="gradient-text" style={{ fontSize: "3rem" }}>
-        Kalavini
-      </h1>
-      <p style={{ color: "var(--text-secondary)", maxWidth: 480, margin: "12px 0" }}>
-        Hidden Talent Network — teach what you know, learn what you love.
-        Full landing page coming in the next module.
-      </p>
+    <div className="landing">
+
+      <nav className="navbar">
+        <h2>Kalavini</h2>
+
+        <div>
+          <Link to="/login" className="nav-btn">
+            Login
+          </Link>
+
+          <Link to="/register" className="nav-btn primary">
+            Get Started
+          </Link>
+        </div>
+      </nav>
+
+      <section className="hero">
+
+        <h1>
+          Teach what you know.
+          <br />
+          Learn what you love.
+        </h1>
+
+        <p>
+          Kalavini is a hidden talent network where learners and mentors
+          connect through skill exchange.
+        </p>
+
+        <div className="hero-buttons">
+          <Link to="/register" className="hero-btn">
+            Join Now
+          </Link>
+
+          <Link to="/login" className="hero-btn secondary">
+            Login
+          </Link>
+        </div>
+
+      </section>
+
+      <section className="features">
+
+        <div className="feature-card">
+          <h3>🎓 Learn Skills</h3>
+          <p>Discover people ready to teach what they know.</p>
+        </div>
+
+        <div className="feature-card">
+          <h3>🤝 Skill Exchange</h3>
+          <p>Exchange your knowledge instead of paying money.</p>
+        </div>
+
+        <div className="feature-card">
+          <h3>🚀 Grow Together</h3>
+          <p>Build connections with learners and mentors.</p>
+        </div>
+
+      </section>
+
+      <footer>
+        © 2026 Kalavini • Hidden Talent Network
+      </footer>
+
     </div>
   );
 }
